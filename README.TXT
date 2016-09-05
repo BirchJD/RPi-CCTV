@@ -189,3 +189,23 @@ crontab -e
 /*****************************/
 sudo reboot
 
+
+
+  /**********************************************/
+ /* Install the RPi-CCTV distribution locally. */
+/**********************************************/
+wget -nc https://github.com/BirchJD/RPi-CCTV/archive/master.zip
+unzip master.zip
+
+   /************************************************/
+  /* Copy private key back from the Raspberry Pi. */
+ /* For passwordless connections.                */
+/************************************************/
+scp pi@[IP_ADDRESS]:/home/pi/CCTV_rsa ~/RPi-CCTV-master/
+
+  /*****************************/
+ /* Test passwordless access. */
+/*****************************/
+cd RPi-CCTV-master/
+./CCTV-ls.sh 192.168.0.10
+
