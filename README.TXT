@@ -28,7 +28,7 @@
   /**********************************************************/
  /* Configure Wifi access directly to SD card file system. */
 /**********************************************************/
-sudo vi /etc/wpa_supplicant/wpa_supplicant.conf 
+sudo vi /[SD_MOUNT_PONT]/etc/wpa_supplicant/wpa_supplicant.conf 
    country=GB
    ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
    update_config=1
@@ -43,15 +43,16 @@ sudo vi /etc/wpa_supplicant/wpa_supplicant.conf
 /* Place SD card into Raspberry Pi and boot up. */
 /************************************************/
 
-  /********************************************/
- /* Copy required files to the Raspberry Pi. */
-/********************************************/
-scp CCTV_rsa.pub pi@[IP_ADDRESS]:/home/pi/
-
   /*********************************************/
  /* Start an ssh session to the Raspberry Pi. */
 /*********************************************/
 ssh pi@[IP_ADDRESS]
+
+  /**************************************/
+ /* Install the RPi-CCTV distribution. */
+/**************************************/
+wget https://github.com/BirchJD/RPi-CCTV/archive/master.zip
+unzip master.zip
 
   /*************************************************************************/
  /* Make sure the default pi and root passwords are changed for security. */
@@ -70,6 +71,7 @@ touch ~/.ssh/authorized_keys
 chmod go= ~/.ssh/authorized_keys
 chmod u=rw ~/.ssh/authorized_keys
 
+ssh-keygen -t rsa -b 4096 -C "x@x.com"
 cat ~/CCTV_rsa.pub >  ~/.ssh/authorized_keys
 
   /*********************************************/
@@ -103,11 +105,6 @@ sudo apt-get install motion
 sudo apt-get install apache2
 sudo apt-get install libapache2-mod-php5
 
-  /*********************************************/
- /* Start an ssh session to the Raspberry Pi. */
-/*********************************************/
-ssh -i [PRIVATE_KEY_FILE] pi@[IP_ADDRESS]
-
   /******************************/
  /* Enable CCTV web interface. */
 /******************************/
@@ -118,8 +115,8 @@ sudo mkdir /var/www/html/temp/
 sudo chmod gu=rwx /var/www/html/temp
 sudo chown -R www-data:www-data /var/www/html
 sudo rm /var/www/html/index.html
-sudo cp index.php /var/www/html/
-sudo cp wwwFrame.sh /usr/lib/cgi-bin/
+sudo cp RPi-CCTV-master/index.php /var/www/html/
+sudo cp RPi-CCTV-master/wwwFrame.sh /usr/lib/cgi-bin/
 sudo sudo chown -R www-data:www-data /usr/lib/cgi-bin
 
   /*******************************************************************/
@@ -128,7 +125,7 @@ sudo sudo chown -R www-data:www-data /usr/lib/cgi-bin
 vi .bashrc
    HISTSIZE=0
    HISTFILESIZE=0
-   cd /home/pi
+   cd /home/pi/RPi-CCTV-master/
    ./Start.sh 2>&1 /home/pi/Start.log
    # ./Start-Photo.sh 2>&1 /home/pi/Start-Photo.log
    # ./Start-Motion.sh 2>&1 /home/pi/Start-Motion.log
@@ -141,16 +138,19 @@ vi .bashrc
 sudo vi /etc/group
    motion:x:114:pi
 
-  /**************************************/
- /* Configure motion software package. */
-/**************************************/
-sudo cp /etc/motion/motion.conf /home/pi/
+  /************************************/
+ /* Configure cron scheduled events. */
+/************************************/
+crontab -e
+0 * * * * /home/pi/RPi-CCTV-master/PruneData.sh > /home/pi/PruneData.log
+0,5,10,15,20,25,30,35,40,45,50,55 * * * * /home/pi/RPi-CCTV-master/CheckWifi.sh >> /home/pi/CheckWifi.log
 
 #/************************************************************************/
 #/* NOTE THE FOLLOWING ARE THE CONFIGURATION OPTIONS WHICH HAVE BEEN SET */
 #/* IN THE MOTION.CONF FILE COPIED IN THE LINE ABOVE, FOR REFERENCE.     */
 #/************************************************************************/
-# vi /home/pi/motion.conf
+# sudo cp /etc/motion/motion.conf /home/pi/RPi-CCTV-master/
+# vi /home/pi/RPi-CCTV-master/motion.conf
 #    daemon off
 # 
 #    threshold_tune off

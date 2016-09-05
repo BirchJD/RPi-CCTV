@@ -30,7 +30,7 @@
 #/**********************************************************************/
 
 # crontab -e
-# 0,5,10,15,20,25,30,35,40,45,50,55 * * * * /home/pi/CheckWifi.sh >> /home/pi/CheckWifi.log
+# 0,5,10,15,20,25,30,35,40,45,50,55 * * * * /home/pi/RPi-CCTV-master/CheckWifi.sh >> /home/pi/CheckWifi.log
 
 ping -nq -W 1 -I wlan0 -c 1 192.168.0.1 2>&1 > /dev/null
 

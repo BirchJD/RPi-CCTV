@@ -22,7 +22,7 @@
 #/* Script to stop recording CCTV media files and reboot the Raspberry Pi. */
 #/**************************************************************************/
 
-cd ~
+cd ~/RPi-CCTV-master/
 ./Stop.sh
 sudo reboot
 

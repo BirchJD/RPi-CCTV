@@ -30,7 +30,7 @@ if [ "$1" == "" ]
 then
    echo $0 [IP_ADDRESS]
 else
-   scp -i CCTV_rsa * pi@$1:/home/pi/
-   ssh -i CCTV_rsa pi@$1 /home/pi/REBOOT.sh
+   scp -i CCTV_rsa * pi@$1:/home/pi/RPi-CCTV-master/
+   ssh -i CCTV_rsa pi@$1 /home/pi/RPi-CCTV-master/REBOOT.sh
 fi
 

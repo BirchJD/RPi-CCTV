@@ -39,8 +39,8 @@ import RPi.GPIO
 GPIO_PULSE_PINS = [ 15, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
 PERIOD = 0.25
 RECORD_PERIOD = 60.0
-CMD_RECORD = "/home/pi/Record.sh &"
-CHECK_CMD_RECORD = "/home/pi/CheckRecord.sh"
+CMD_RECORD = "/home/pi/RPi-CCTV-master/Record.sh &"
+CHECK_CMD_RECORD = "/home/pi/RPi-CCTV-master/CheckRecord.sh"
 LOG_FILE = "/DATA/IR-Motion.log"
 
 

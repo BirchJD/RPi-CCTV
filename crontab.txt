@@ -22,9 +22,9 @@
 #
 # Ensure disk space never runs out by removing the oldest media when disk
 # space begins to run out.
-0 * * * * /home/pi/PruneData.sh > /home/pi/PruneData.log
+0 * * * * /home/pi/RPi-CCTV-master/PruneData.sh > /home/pi/PruneData.log
 #
 # If Wifi disconnects, it can leave the Raspberry Pi unreachable. Check Wifi
 # is connected periodically, if not, reconnect the Wifi connection.
-0,5,10,15,20,25,30,35,40,45,50,55 * * * * /home/pi/CheckWifi.sh >> /home/pi/CheckWifi.log
+0,5,10,15,20,25,30,35,40,45,50,55 * * * * /home/pi/RPi-CCTV-master/CheckWifi.sh >> /home/pi/CheckWifi.log
 

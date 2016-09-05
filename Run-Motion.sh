@@ -26,7 +26,7 @@
 #/* space.                                                             */
 #/**********************************************************************/
 
-nohup motion -c /home/pi/motion.conf &
+nohup motion -c /home/pi/RPi-CCTV-master/motion.conf &
 
 while [ 1 -eq 1 ]
 do
