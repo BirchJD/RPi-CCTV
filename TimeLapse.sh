@@ -17,24 +17,43 @@
 # along with this program.  If not, see &lt;http://www.gnu.org/licenses/>.
 
 #/**********************************************************************/
-#/* V1.00   2016-09-02  Jason Birch                                    */
+#/* V1.00   2016-09-09  Jason Birch                                    */
 #/*                                                                    */
-#/* Retrieve a set of media files from a remote Raspberry Pi.          */
+#/* Create time lapse video from downloaded images.                    */
 #/*                                                                    */
 #/* e.g.                                                               */
-#/* ./DownloadImages.sh 192.168.0.15 "2016-09-09_000???.jpg"           */
-#/* ./DownloadImages.sh 192.168.0.15 "??-2016041618????-??.jpg"        */
+#/* ./TimeLapse.sh 2016-09-09 1                                        */
 #/**********************************************************************/
 
 if [ "$2" == "" ]
 then
-   echo "$0 [IP_ADDRESS] [FILE_SPEC]"
+   echo "$0 [DATE] [FIRST_IMAGE_NUMBER]"
 else
-   rm ./TEMP/*.jpg
-   mkdir TEMP
-   cp CCTV_rsa ./TEMP/
    cd TEMP
 
-   scp -i CCTV_rsa pi@$1:/DATA/$2 .
+   export FromCount=$2
+   export ToCount=1
+   export Error=0
+   while [ $Error -le 100 ]
+   do
+      export From=$1_`printf "%6.6u" $FromCount`.jpg
+      export To=`printf "%6.6u" $ToCount`.jpg
+
+      if [ -f "$From" ]
+      then
+         if [ $FromCount -ne $ToCount ]
+         then
+            mv $From $To
+            echo "$From => $To"
+         fi
+         export ToCount=$((ToCount+1))
+         export Error=0
+      else
+         export Error=$((Error+1))
+      fi
+      export FromCount=$((FromCount+1))
+   done
+
+   avconv -y -r 10 -i %06d.jpg -r 10 -vcodec libx264 -crf 20 -g 15 timelapse.mp4
 fi
 

@@ -24,5 +24,5 @@
 #/* Provide the best parameter arguments for the image recording.      */
 #/**********************************************************************/
 
-raspistill -f -q 10 -w 1024 -h 768 -t 0 -tl 250 -ex night -l /var/www/html/image.jpg -o /DATA/%06d.jpg
+raspistill -f -q 10 -w 1024 -h 768 -t 0 -tl 250 -ex night -l /var/www/html/image.jpg -o /DATA/`date +%Y-%m-%d`_%06d.jpg
 
