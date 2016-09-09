@@ -115,9 +115,11 @@ sudo mkdir /var/www/html/temp/
 sudo chmod gu=rwx /var/www/html/temp
 sudo chown -R www-data:www-data /var/www/html
 sudo rm /var/www/html/index.html
-sudo cp RPi-CCTV-master/index.php /var/www/html/
+sudo touch /var/www/html/image.jpg
+chmod gu=rw /var/www/html/image.jpg
+sudo cp RPi-CCTV-master/*.php /var/www/html/
 sudo cp RPi-CCTV-master/wwwFrame.sh /usr/lib/cgi-bin/
-sudo sudo chown -R www-data:www-data /usr/lib/cgi-bin
+sudo chown -R www-data:www-data /usr/lib/cgi-bin
 
   /*******************************************************************/
  /* Configure the required CCTV process to start when system boots. */

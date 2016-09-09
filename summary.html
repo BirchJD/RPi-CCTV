@@ -1,0 +1,60 @@
+<!--
+# RPiCCTV - CCTV System for Raspberry Pi
+# Copyright (C) 2016 Jason Birch
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see &lt;http://www.gnu.org/licenses/>.
+
+/**************************************************************************/
+/* V1.00   2016-09-02  Jason Birch                                        */
+/*                                                                        */
+/* Web page to view in a browser on the local machine, to show a summary  */
+/* of CCTV images from all cameras.                                       */
+/**************************************************************************/
+-->
+
+<HTML>
+   <HEAD>
+      <TITLE>CCTV Summary</TITLE>
+   </HEAD>
+   <BODY BGCOLOR='#7F7F7F'>
+      <CENTER>
+         <FORM METHOD='POST'>
+            <TABLE>
+               <TR>
+                  <TD COLSPAN='2'>
+                     <INPUT TYPE='SUBMIT' STYLE='WIDTH: 100%; FONT-WEIGHT: BOLD;' VALUE='REFRESH'><BR>
+                  </TD>
+               </TR>
+               <TR>
+                  <TD>
+                     <IMG WIDTH='640' HEIGHT='400' STYLE='BORDER: NONE;' SRC='http://192.168.0.2/frame.php'>
+                  </TD>
+                  <TD>
+                     <IMG WIDTH='640' HEIGHT='400' STYLE='BORDER: NONE;' SRC='http://192.168.0.3/frame.php'>
+                  </TD>
+               </TR>
+               <TR>
+                  <TD>
+                     <IMG WIDTH='640' HEIGHT='400' STYLE='BORDER: NONE;' SRC='http://192.168.0.4/frame.php'>
+                  </TD>
+                  <TD>
+                     <IMG WIDTH='640' HEIGHT='400' STYLE='BORDER: NONE;' SRC='http://192.168.0.5/frame.php'>
+                  </TD>
+               </TR>
+            </TABLE>
+         </FORM>
+      </CENTER>
+   </BODY>
+</HTML>
+

@@ -29,22 +29,22 @@
 
 # Find the current image file and use that in case video is not in use.
 export CurrentImageFile=`ls -1t /DATA/*.jpg | head -1`
-if [ -f $CurrentVideoFile ]
+if [ -f "$CurrentImageFile" ]
 then
-   cp $CurrentVideoFile /var/www/html/image.jpg
+   sudo cp $CurrentImageFile /var/www/html/image.jpg
 fi
 
 # Find the current video file.
 export CurrentVideoFile=`ls -1t /DATA/*.h264 | head -1`
 
-if [ -f $CurrentVideoFile ]
+if [ -f "$CurrentVideoFile" ]
 then
    # Get the header from the current video file.
    head -c $(( 1*128 )) $CurrentVideoFile > /var/www/html/temp/temp.h264
 
    # Get the most recent data from the current video file.
    # NOTE: If this may need to be increased for high resolution video data.
-   tail -c $(( 512*1024 )) $CurrentVideoFile >> /var/www/html/temp/temp.h264
+   tail -c $(( 1024*1024 )) $CurrentVideoFile >> /var/www/html/temp/temp.h264
 
    # Get a thumbnail a couple of seconds into the most recent video data.
    avconv -i /var/www/html/temp/temp.h264 -vf select="eq(n\,60)" -vframes 1 '/var/www/html/image.jpg'
