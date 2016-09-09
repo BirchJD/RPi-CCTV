@@ -31,7 +31,7 @@
 export CurrentImageFile=`ls -1t /DATA/*.jpg | head -1`
 if [ -f "$CurrentImageFile" ]
 then
-   sudo cp $CurrentImageFile /var/www/html/image.jpg
+   cp $CurrentImageFile /var/www/html/image.jpg
 fi
 
 # Find the current video file.
@@ -50,6 +50,9 @@ then
    avconv -i /var/www/html/temp/temp.h264 -vf select="eq(n\,60)" -vframes 1 '/var/www/html/image.jpg'
 fi
 
-# Get most recent log events.
-tail -200l /DATA/IR-Motion.log > /var/www/html/log.inc
+if [ -f "/DATA/IR-Motion.log" ]
+then
+   # Get most recent log events.
+   tail -200l /DATA/IR-Motion.log > /var/www/html/log.inc
+fi
 

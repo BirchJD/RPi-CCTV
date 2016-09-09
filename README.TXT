@@ -111,15 +111,22 @@ sudo apt-get install libapache2-mod-php5
 sudo a2enmod php5
 sudo a2ensite 000-default.conf
 
-sudo mkdir /var/www/html/temp/
-sudo chmod gu=rwx /var/www/html/temp
-sudo chown -R www-data:www-data /var/www/html
 sudo rm /var/www/html/index.html
+sudo touch /var/www/html/log.inc
 sudo touch /var/www/html/image.jpg
-chmod gu=rw /var/www/html/image.jpg
+sudo mkdir /var/www/html/temp/
+
 sudo cp RPi-CCTV-master/*.php /var/www/html/
 sudo cp RPi-CCTV-master/wwwFrame.sh /usr/lib/cgi-bin/
+
+sudo chown -R www-data:www-data /var/www/html
 sudo chown -R www-data:www-data /usr/lib/cgi-bin
+
+sudo find /var/www/html/ -type d -exec chmod guo=rx {} \;
+sudo find /var/www/html/ -type f -exec chmod guo=r {} \;
+sudo chmod gu=rwx /var/www/html/temp
+sudo chmod gu=rw /var/www/html/log.inc
+sudo chmod gu=rw /var/www/html/image.jpg
 
   /*******************************************************************/
  /* Configure the required CCTV process to start when system boots. */
@@ -209,5 +216,5 @@ scp pi@[IP_ADDRESS]:/home/pi/CCTV_rsa ~/RPi-CCTV-master/
  /* Test passwordless access. */
 /*****************************/
 cd RPi-CCTV-master/
-./CCTV-ls.sh 192.168.0.10
+./CCTV-ls.sh [IP_ADDRESS]
 
