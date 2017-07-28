@@ -26,6 +26,7 @@
 
 export Filename=`date +%Y-%m-%d_%H-%M-%S`
 
-raspivid -f -w 1024 -h 768 -t 3600000 -b 1000000 -ex night -e -rot 0 -o /DATA/$Filename.h264
+raspivid -f -w 1024 -h 768 -t 3600000 -b 1000000 -ex night -br 55 -e -rot 0 -o /DATA/$Filename.h264
 
-#raspivid -f -w 1920 -h 1080 -t 3600000 -b 2500000 -ex night -e -rot 0 -o /DATA/$Filename.h264
+#raspivid -f -w 1024 -h 768 -t 3600000 -b 1000000 -ex nightpreview -br 55 -e -rot 0 -o /DATA/$Filename.h264
+#raspivid -f -w 1920 -h 1080 -t 3600000 -b 2500000 -ex night -br 55 -e -rot 0 -o /DATA/$Filename.h264

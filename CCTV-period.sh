@@ -51,6 +51,8 @@ else
    # ../CCTV-get.sh $1 "$THISDAY"_01-*
    # ../CCTV-get.sh $1 "$THISDAY"_02-*
 
+   avconv -i FULL_VIDEO_$THISDAY.h264 -vf scale=640:480 -b 100000 FULL_VIDEO_SMALL_$THISDAY.h264
+
    cd ..
 fi
 
