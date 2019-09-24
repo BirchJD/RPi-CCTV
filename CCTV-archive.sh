@@ -19,12 +19,13 @@
 #/**********************************************************************/
 #/* V1.00   2016-09-02  Jason Birch                                    */
 #/*                                                                    */
-#/* Retrieve a set of media files for a specific day and hour,         */
-#/* from a remote Raspberry Pi for the period of night time, at the    */
-#/* specified number of days old.                                      */
+#/* Retrieve a set of media files for a specific day, from a remote    */
+#/* Raspberry Pi for the period of night time, at the specified number */
+#/* of days old. Concatenate them into a single lower resolution and   */
+#/* bit rate, for archiving.                                           */
 #/*                                                                    */
 #/* e.g.                                                               */
-#/* ./CCTV-period.sh 192.168.0.5 1 '0?' 1600                           */
+#/* ./CCTV-archive.sh 192.168.0.5 1                                    */
 #/**********************************************************************/
 
 
@@ -34,7 +35,7 @@ export ARCHIVEDIR=/media/pi/CCTV/ARCHIVE
 
 if [ "$2" == "" ]
 then
-   echo $0 [IP_ADDRESS] [DAYS_AGO] [HOUR_SPEC] [KBIT_RATE]
+   echo $0 [IP_ADDRESS] [DAYS_AGO]
 else
    mkdir $ARCHIVEDIR/TEMP
    find $ARCHIVEDIR/TEMP/*.h264 -mtime +3 -exec rm {} \;
@@ -46,8 +47,26 @@ else
 #/******************************************************************/
    export THISDAY=`date +%Y-%m-%d -d "$2 day ago"`
 
-   echo GETTING: "$THISDAY"_*
-   $THISDIR/CCTV-get.sh $1 "$THISDAY"_$3-* $4
+   echo SYNCING: "$THISDAY"_*
+   # rsync -e "ssh -i CCTV_rsa" -v --size-only --bwlimit 1600 pi@$1:/DATA/"$THISDAY"_* $ARCHIVEDIR/TEMP/
+   rsync -e "ssh -i CCTV_rsa" -v --size-only pi@$1:/DATA/"$THISDAY"_* $ARCHIVEDIR/TEMP/
+
+#  /***********************************************************/
+# /* Concatenate all videos for the day into a single video. */
+#/***********************************************************/
+   cat "$THISDAY"_*.h264 > FULL_VIDEO_$THISDAY.h264
+
+#   /**********************************************************************/
+#  /* Convert video into lower resolution, lower bit rate.               */
+# /* So it can be scanned at faster speed and more archived in history. */
+#/**********************************************************************/
+#   avconv -i FULL_VIDEO_$THISDAY.h264 -y -vf scale=640:480 -b 100000 ../FULL_VIDEO_SMALL_$THISDAY.h264
+   # avconv -i FULL_VIDEO_$THISDAY.h264 -y -vf scale=640:480 -b 100000 ../FULL_VIDEO_SMALL_$THISDAY.mpg
+   # avconv -i FULL_VIDEO_$THISDAY.h264 -y -vf scale=640:480 -b 100000 ../FULL_VIDEO_SMALL_$THISDAY.mp4
+
+   # avconv -i FULL_VIDEO_$THISDAY.h264 -y -vf select="not(mod(n\,6))" -b 250000 ../FULL_VIDEO_SMALL_$THISDAY.h264
+
+   cp FULL_VIDEO_$THISDAY.h264 ../FULL_VIDEO_SMALL_$THISDAY.h264
 
    cd $THISDIR
 fi

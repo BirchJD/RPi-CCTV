@@ -23,13 +23,18 @@
 #/*                                                                    */
 #/* e.g.                                                               */
 #/* ./CCTV-get.sh 192.168.0.5 2016-08-17_20-13-10.h264                 */
-#/* ./CCTV-get.sh 192.168.0.5 2016-08-17_*                             */
+#/* ./CCTV-get.sh 192.168.0.5 2016-08-17_* 1600                        */
 #/**********************************************************************/
 
 if [ "$2" == "" ]
 then
-   echo $0 [IP_ADDRESS] [FILE_SPEC]
+   echo $0 [IP_ADDRESS] [FILE_SPEC] [BANDWIDTH]
 else
-   scp -i CCTV_rsa "pi@$1:/DATA/$2" .
+   if [ "$3" == "" ]
+   then
+      scp -i CCTV_rsa "pi@$1:/DATA/$2" .
+   else
+      scp -l $3 -i CCTV_rsa "pi@$1:/DATA/$2" .
+   fi
 fi
 

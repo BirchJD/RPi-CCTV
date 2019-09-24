@@ -100,6 +100,7 @@ sudo vi /boot/config.txt
 sudo apt-get update
 sudo apt-get upgrade
 sudo apt-get dist-upgrade
+sudo apt-get install rsync
 sudo apt-get install libav-tools
 sudo apt-get install motion
 sudo apt-get install apache2

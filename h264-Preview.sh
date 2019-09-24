@@ -25,35 +25,39 @@
 #/* a time lapse video which will be quicker to review.                */  
 #/*                                                                    */
 #/* e.g.                                                               */
-#/* ./MakeThumbs.sh 2016-04-15_22-22-07.h264                           */
+#/* ./h264-Preview.sh 2016-04-15_22-22-07.h264                         */
 #/**********************************************************************/
+
+
+export ARCHIVEDIR=/media/pi/CCTV/ARCHIVE
+export FILENAME=`basename $1` 
 
 # find . -name '*.h264' -exec ./h264-Preview.sh {} \;
 
-rm -rf TEMP-FRAMES
-mkdir TEMP-FRAMES
+rm -rf $ARCHIVEDIR/TEMP-FRAMES
+mkdir $ARCHIVEDIR/TEMP-FRAMES
 
-avconv -i $1 -s 320x240 -q:v 15 TEMP-FRAMES/%d.jpg
+avconv -i $1 -s 320x240 -vf select="not(mod(n\,500))" -q:v 15 $ARCHIVEDIR/TEMP-FRAMES/%d.jpg
 
 export Count=1
 export Target=1
 export Test=1
-while [ -e "TEMP-FRAMES/$Count.jpg" ]
+while [ -e "$ARCHIVEDIR/TEMP-FRAMES/$Count.jpg" ]
 do
    if [ $Test -eq 30 ]
    then
       export Test=1
 
-      mv TEMP-FRAMES/$Count.jpg TEMP-FRAMES/$Target.jpg
+      mv $ARCHIVEDIR/TEMP-FRAMES/$Count.jpg $ARCHIVEDIR/TEMP-FRAMES/$Target.jpg
 
       Target=$((Target+1))
    else
-      rm TEMP-FRAMES/$Count.jpg
+      rm $ARCHIVEDIR/TEMP-FRAMES/$Count.jpg
    fi
 
    Count=$((Count+1))
    Test=$((Test+1))
 done
 
-avconv -i TEMP-FRAMES/%d.jpg $1.avi
+avconv -i $ARCHIVEDIR/TEMP-FRAMES/%d.jpg $ARCHIVEDIR/$FILENAME.mp4
 

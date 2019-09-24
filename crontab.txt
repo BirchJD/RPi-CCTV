@@ -26,5 +26,8 @@
 #
 # If Wifi disconnects, it can leave the Raspberry Pi unreachable. Check Wifi
 # is connected periodically, if not, reconnect the Wifi connection.
+#
 0,5,10,15,20,25,30,35,40,45,50,55 * * * * /home/pi/RPi-CCTV-master/CheckWifi.sh >> /home/pi/CheckWifi.log
+# 0 * * * * /home/pi/Desktop/RPi-CCTV/CCTV-archive-sync.sh 192.168.0.202 0 > /home/pi/Desktop/RPi-CCTV/CCTV-archive-sync.log
+# 0 4 * * * /home/pi/Desktop/RPi-CCTV/CCTV-archive.sh 192.168.0.202 1 > /home/pi/Desktop/RPi-CCTV/CCTV-archive.log
 

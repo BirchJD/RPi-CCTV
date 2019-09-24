@@ -19,23 +19,38 @@
 #/**********************************************************************/
 #/* V1.00   2016-09-02  Jason Birch                                    */
 #/*                                                                    */
-#/* Convert a video file into a series of frame image thumbnail files. */
+#/* Retrieve a set of media files for a specific day, from a remote    */
+#/* Raspberry Pi for the period of night time, at the specified number */
+#/* of days old.                                                       */
 #/*                                                                    */
 #/* e.g.                                                               */
-#/* ./MakeThumbs.sh 2016-04-15_22-22-07.h264                           */
+#/* ./CCTV-archive-sync.sh 192.168.0.5 1                               */
 #/**********************************************************************/
 
 
+export THISDIR=$PWD
 export ARCHIVEDIR=/media/pi/CCTV/ARCHIVE
 
 
-if [ "$1" == "" ]
+if [ "$2" == "" ]
 then
-   echo $0 [MEDIA_FILE]
+   echo $0 [IP_ADDRESS] [DAYS_AGO]
 else
-   rm -r $ARCHIVEDIR/THUMBNAILS
-   mkdir $ARCHIVEDIR/THUMBNAILS
+   mkdir $ARCHIVEDIR/TEMP
+   find $ARCHIVEDIR/TEMP/*.h264 -mtime +3 -exec rm {} \;
+   cp CCTV_rsa $ARCHIVEDIR/TEMP/
+   cd $ARCHIVEDIR/TEMP
 
-   avconv -i /DATA/$1 -vf select="not(mod(n\,125))" $ARCHIVEDIR/THUMBNAILS/IMAGE_%05d.jpg
+#  /******************************************************************/
+# /* Get the required specification of video for the specified day. */
+#/******************************************************************/
+   export THISDAY=`date +%Y-%m-%d -d "$2 day ago"`
+
+   echo SYNCING: "$THISDAY"_*
+   # rsync -e "ssh -i CCTV_rsa" -v --size-only --bwlimit 1600 pi@$1:/DATA/"$THISDAY"_* $ARCHIVEDIR/TEMP/
+   rsync -e "ssh -i CCTV_rsa" -v --size-only pi@$1:/DATA/"$THISDAY"_* $ARCHIVEDIR/TEMP/
+
+
+   cd $THISDIR
 fi
 
